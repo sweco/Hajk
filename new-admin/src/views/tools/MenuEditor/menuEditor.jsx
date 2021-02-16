@@ -544,6 +544,19 @@ class ToolOptions extends Component {
               Spara
             </ColorButtonBlue>
           </p>
+          <div>
+            <input
+              id="active"
+              name="active"
+              type="checkbox"
+              onChange={(e) => {
+                this.handleInputChange(e);
+              }}
+              checked={this.state.active}
+            />
+            &nbsp;
+            <label htmlFor="active">Aktiverad</label>
+          </div>
           <div className="separator">Meny Ändringar</div>
           <p>
             <ColorButtonBlue
