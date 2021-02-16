@@ -162,13 +162,17 @@ class ToolOptions extends Component {
     });
   }
 
-  save(savedFromMenuEditor) {
-    if (savedFromMenuEditor) {
-      this.menuConfig = this.menuEditorModel.exportTreeAsMenuJson(
-        this.state.tree,
-        this.menuConfig
-      );
-    }
+  saveFromMenuEditor() {
+    this.menuConfig = this.menuEditorModel.exportTreeAsMenuJson(
+      this.state.tree,
+      this.menuConfig
+    );
+    this.setState({ menuConfig: this.menuConfig }, () => {
+      this.save();
+    });
+  }
+
+  save() {
     var tool = {
       type: this.type,
       index: this.state.index,
@@ -189,9 +193,7 @@ class ToolOptions extends Component {
         drawerButtonTitle: this.state.drawerButtonTitle,
         tableOfContents: this.state.tableOfContents,
         defaultDocumentColorSettings: this.state.defaultDocumentColorSettings,
-        menuConfig: savedFromMenuEditor
-          ? this.menuConfig
-          : this.state.menuConfig,
+        menuConfig: this.state.menuConfig,
       },
     };
 
@@ -245,7 +247,7 @@ class ToolOptions extends Component {
   onSaveMenuEditsClick = (e) => {
     e.preventDefault();
     this.setState({ openMenuEditor: false }, () => {
-      this.save(true);
+      this.saveFromMenuEditor();
     });
   };
 
