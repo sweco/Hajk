@@ -35,12 +35,19 @@ class ToolOptions extends Component {
     active: false,
     index: 0,
     title: "Visa informationsruta",
+    target: "hidden",
     showScrollButtonLimit: 400,
+    dynamicImportUrls: {
+      iconFonts: "https://fonts.googleapis.com/icon?family=Material+Icons",
+      customFont: "https://fonts.googleapis.com/css?family=Open+Sans",
+    },
     width: 600,
     height: "90vh",
-    menuConfig: {},
+    menuConfig: {
+      menu: [],
+    },
     iconLibraryLink: "https://material.io/resources/icons/?style=baseline",
-    customThemeUrl: "",
+    customThemeUrl: "/documentHandlerTheme.json",
     openMenuEditor: false,
     validationErrors: [],
     documentOnStart: "",
@@ -61,7 +68,9 @@ class ToolOptions extends Component {
     },
   };
   treeKeys = [];
-  menuConfig = null;
+  menuConfig = {
+    menu: [],
+  };
   availableDocuments = [];
 
   constructor(props) {
@@ -327,7 +336,9 @@ class ToolOptions extends Component {
     return this.menuEditorModel
       .loadMenuConfigForMap(this.mapSettingsModel.get("mapFile"))
       .then((menuConfig) => {
-        this.menuConfig = menuConfig.options.menuConfig;
+        if (menuConfig) {
+          this.menuConfig = menuConfig?.options?.menuConfig;
+        }
         let treeData = this.createTreeStructure(this.menuConfig.menu);
         return treeData;
       });
