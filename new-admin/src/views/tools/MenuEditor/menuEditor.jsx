@@ -56,6 +56,7 @@ class ToolOptions extends Component {
     searchImplemented: true,
     enablePrint: true,
     closePanelOnMapLinkOpen: false,
+    displayLoadingOnMapLinkOpen: false,
     tableOfContents: {
       active: false,
       expanded: false,
@@ -113,6 +114,7 @@ class ToolOptions extends Component {
         searchImplemented: tool.options.searchImplemented,
         enablePrint: tool.options.enablePrint,
         closePanelOnMapLinkOpen: tool.options.closePanelOnMapLinkOpen,
+        displayLoadingOnMapLinkOpen: tool.options.displayLoadingOnMapLinkOpen,
         tableOfContents: tool.options.tableOfContents,
         defaultDocumentColorSettings: tool.options.defaultDocumentColorSettings,
       });
@@ -188,6 +190,7 @@ class ToolOptions extends Component {
         searchImplemented: this.state.searchImplemented,
         enablePrint: this.state.enablePrint,
         closePanelOnMapLinkOpen: this.state.closePanelOnMapLinkOpen,
+        displayLoadingOnMapLinkOpen: this.state.displayLoadingOnMapLinkOpen,
         documentOnStart: this.state.documentOnStart,
         drawerTitle: this.state.drawerTitle,
         drawerButtonTitle: this.state.drawerButtonTitle,
@@ -682,6 +685,25 @@ class ToolOptions extends Component {
             &nbsp;
             <label style={{ width: "200px" }} htmlFor="closePanelOnMapLinkOpen">
               Stäng dokumentfönster vid klick på kartlänk
+            </label>
+          </div>
+
+          <div>
+            <input
+              id="displayLoadingOnMapLinkOpen"
+              name="displayLoadingOnMapLinkOpen"
+              type="checkbox"
+              onChange={(e) => {
+                this.handleInputChange(e);
+              }}
+              checked={this.state.displayLoadingOnMapLinkOpen}
+            />
+            &nbsp;
+            <label
+              style={{ width: "200px" }}
+              htmlFor="displayLoadingOnMapLinkOpen"
+            >
+              Visa 'Kartan laddar' dialog vid klick på kartlänk
             </label>
           </div>
 
