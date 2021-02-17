@@ -337,9 +337,9 @@ class ToolOptions extends Component {
   getTreeView = () => {
     return this.menuEditorModel
       .loadMenuConfigForMap(this.mapSettingsModel.get("mapFile"))
-      .then((menuConfig) => {
-        if (menuConfig) {
-          this.menuConfig = menuConfig?.options?.menuConfig;
+      .then((toolConfig) => {
+        if (toolConfig && toolConfig?.options?.menuConfig) {
+          this.menuConfig = toolConfig.options.menuConfig;
         }
         let treeData = this.createTreeStructure(this.menuConfig.menu);
         return treeData;
