@@ -114,9 +114,7 @@ const styles = (theme) => {
       right: 0,
       flexDirection: "column",
       userSelect: "none",
-    },
-    panelContentDisplayContents: {
-      display: "contents",
+      outline: "none",
     },
     content: {
       flex: "1",
@@ -162,11 +160,12 @@ class Window extends React.PureComponent {
   constructor(props) {
     super(props);
     document.windows.push(this);
+    this.windowRef = React.createRef();
     this.state = {
       left: 0,
       top: 0,
       width: 300,
-      height: this.props.height === "dynamic" ? "auto" : 400,
+      height: 400,
     };
 
     window.addEventListener("resize", () => {
@@ -176,9 +175,17 @@ class Window extends React.PureComponent {
         this.updatePosition();
       }
     });
-
-    this.localObserver = this.props.localObserver;
   }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.props.open) {
+      //This is ugly but there is a timing problem further down somewhere (i suppose?).
+      //componentDidUpdate is run before the render is actually fully completed and the DOM is ready
+      setTimeout(() => {
+        this.windowRef.current.focus();
+      }, 200);
+    }
+  };
 
   componentDidMount() {
     const { globalObserver } = this.props;
@@ -229,7 +236,7 @@ class Window extends React.PureComponent {
     this.height = height || 300;
 
     // If "auto" height is set, it means we want the Window to take up maximum space available
-    if (this.props.height !== "dynamic" && this.height === "auto") {
+    if (this.height === "auto") {
       // If Breadcrumbs are activated (in LayerSwitcher's config), we must make
       // sure that our Windows leave some space at the bottom for the Breadcrumbs.
       const spaceForBreadcrumbs = this.areBreadcrumbsActivated() ? 42 : 0;
@@ -274,11 +281,9 @@ class Window extends React.PureComponent {
   }
 
   close = (e) => {
-    const { onClose, globalObserver, title } = this.props;
+    const { onClose } = this.props;
     this.latestWidth = this.rnd.getSelfElement().clientWidth;
     if (onClose) onClose();
-
-    globalObserver.publish("window-close", title);
   };
 
   fit = (target) => {
@@ -334,22 +339,13 @@ class Window extends React.PureComponent {
   };
 
   maximize = () => {
-    const {
-      globalObserver,
-      onMaximize,
-      onResize,
-      allowMaximizedWindow,
-      title,
-    } = this.props;
+    const { onMaximize, onResize, allowMaximizedWindow } = this.props;
 
     getIsMobile() && this.rnd.updatePosition({ y: 0 });
 
     switch (this.state.mode) {
       case "minimized":
         // Enlarge back to "window" mode
-        if (this.height === "dynamic") {
-          this.height = "auto";
-        }
         this.enlarge();
         break;
       case "window":
@@ -368,12 +364,10 @@ class Window extends React.PureComponent {
     // Run callbacks
     typeof onMaximize === "function" && onMaximize();
     typeof onResize === "function" && onResize();
-
-    globalObserver.publish("window-maximize", title);
   };
 
   minimize = () => {
-    const { globalObserver, onMinimize, onResize, title } = this.props;
+    const { onMinimize, onResize } = this.props;
 
     getIsMobile() &&
       this.rnd.updatePosition({
@@ -390,8 +384,6 @@ class Window extends React.PureComponent {
     // Run callbacks
     typeof onMinimize === "function" && onMinimize();
     typeof onResize === "function" && onResize();
-
-    globalObserver.publish("window-minimize", title);
   };
 
   bringToFront() {
@@ -491,7 +483,7 @@ class Window extends React.PureComponent {
         }}
         className={classes.window}
         minWidth={200}
-        minHeight={this.state.mode === "minimized" ? 42 : 100}
+        minHeight={this.state.mode === "minimized" ? 42 : 200}
         size={{
           width: width,
           height: height,
@@ -503,14 +495,7 @@ class Window extends React.PureComponent {
           height: height,
         }}
       >
-        <div
-          className={clsx(
-            classes.panelContent,
-            this.props.height === "dynamic"
-              ? classes.panelContentDisplayContents
-              : null
-          )}
-        >
+        <div tabIndex="0" ref={this.windowRef} className={classes.panelContent}>
           <PanelHeader
             allowMaximizedWindow={allowMaximizedWindow}
             color={color}

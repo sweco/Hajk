@@ -1,23 +1,7 @@
 {
   "activeTools": [
     "Anchor",
-    "Buffer",
-    "Collector",
-    "Coordinates",
-    "DocumentHandler",
-    "Draw",
-    "Edit",
-    "LayerSwitcher",
-    "Location",
-    "Measure",
-    "Print",
-    "Routing",
-    "Search",
-    "StreetView",
-    "vtsearch"
-  ],
-  "allTools": [
-    "Anchor",
+    "Bookmarks",
     "Buffer",
     "Collector",
     "Coordinates",
@@ -25,7 +9,8 @@
     "Draw",
     "Dummy",
     "Edit",
-    "FBService",
+    "Export",
+    "Informative",
     "LayerSwitcher",
     "Location",
     "Measure",
@@ -33,7 +18,27 @@
     "Routing",
     "Search",
     "StreetView",
-    "Suggest",
-    "vtsearch"
+    "Suggest"
+  ],
+  "allTools": [
+    "Anchor",
+    "Bookmarks",
+    "Buffer",
+    "Collector",
+    "Coordinates",
+    "DocumentHandler",
+    "Draw",
+    "Dummy",
+    "Edit",
+    "Export",
+    "Informative",
+    "LayerSwitcher",
+    "Location",
+    "Measure",
+    "Print",
+    "Routing",
+    "Search",
+    "StreetView",
+    "Suggest"
   ]
 }
