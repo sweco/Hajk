@@ -24,7 +24,7 @@ import React from "react";
 import { Component } from "react";
 import Anchor from "./tools/anchor.jsx";
 import Buffer from "./tools/buffer.jsx";
-import Bookmark from "./tools/bookmark.jsx";
+import Bookmarks from "./tools/bookmarks.jsx";
 import Coordinates from "./tools/coordinates.jsx";
 import Draw from "./tools/draw.jsx";
 import Edit from "./tools/edit.jsx";
@@ -42,7 +42,6 @@ import Routing from "./tools/routing.jsx";
 import Collector from "./tools/collector.jsx";
 import Dummy from "./tools/dummy.jsx";
 import MenuEditor from "./tools/MenuEditor/menuEditor.jsx";
-import VtSearch from "./tools/vtsearch.jsx";
 
 var defaultState = {
   activeTool: "",
@@ -89,8 +88,8 @@ class ToolOptions extends Component {
         return <Anchor parent={this} model={this.props.model} />;
       case "buffer":
         return <Buffer parent={this} model={this.props.model} />;
-      case "bookmark":
-        return <Bookmark parent={this} model={this.props.model} />;
+      case "bookmarks":
+        return <Bookmarks parent={this} model={this.props.model} />;
       case "coordinates":
         return <Coordinates parent={this} model={this.props.model} />;
       case "draw":
@@ -125,8 +124,6 @@ class ToolOptions extends Component {
         return <Collector parent={this} model={this.props.model} />;
       case "documenthandler":
         return <MenuEditor parent={this} model={this.props.model} />;
-      case "vtsearch":
-        return <VtSearch parent={this} model={this.props.model} />;
       default:
         return null;
     }
@@ -171,7 +168,7 @@ class ToolOptions extends Component {
     var toolTypes = {
       anchor: "Länk till kartan",
       buffer: "Skapa buffertzon",
-      bookmark: "Bokmärken",
+      bookmarks: "Bokmärken",
       coordinates: "Fånga koordinat",
       draw: "Rita och mäta",
       edit: "Editering",
