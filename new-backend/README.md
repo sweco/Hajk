@@ -74,6 +74,11 @@ node index.js
 
 Optionally, install PM2 to ensure that the app is run as a service (auto-started on server reboots, etc).
 
+### Run on Windows IIS with iisNode
+
+Optionally, install iisNode (module for IIS to run node-applications) https://github.com/Azure/iisnode (backed by Microsoft)
+Possible to use URL-rewrite in IIS and iisNode-module can also forward Server Variables to the node instance, for example LOGON_USER
+
 ### Serve client and admin from Node too
 
 Optionally, you can make this Node process serve the static client and admin apps as well.
