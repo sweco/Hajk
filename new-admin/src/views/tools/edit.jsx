@@ -23,6 +23,20 @@
 import React from "react";
 import { Component } from "react";
 import EditModel from "./../../models/edit.js";
+import Button from "@material-ui/core/Button";
+import SaveIcon from "@material-ui/icons/SaveSharp";
+import { withStyles } from "@material-ui/core/styles";
+import { blue } from "@material-ui/core/colors";
+
+const ColorButtonBlue = withStyles((theme) => ({
+  root: {
+    color: theme.palette.getContrastText(blue[500]),
+    backgroundColor: blue[500],
+    "&:hover": {
+      backgroundColor: blue[700],
+    },
+  },
+}))(Button);
 
 var defaultState = {
   validationErrors: [],
@@ -32,7 +46,7 @@ var defaultState = {
   instruction: "",
   visibleAtStart: false,
   visibleForGroups: [],
-  activeServices: []
+  activeServices: [],
 };
 
 class ToolOptions extends Component {
@@ -65,17 +79,17 @@ class ToolOptions extends Component {
         visibleAtStart: tool.options.visibleAtStart,
         visibleForGroups: tool.options.visibleForGroups
           ? tool.options.visibleForGroups
-          : []
+          : [],
       });
     } else {
       this.setState({
-        active: false
+        active: false,
       });
     }
     if (layersUrl) {
-      this.editModel.getConfig(layersUrl, services => {
+      this.editModel.getConfig(layersUrl, (services) => {
         this.setState({
-          services: services
+          services: services,
         });
       });
     }
@@ -99,14 +113,14 @@ class ToolOptions extends Component {
       value = btoa(value);
     }
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
   getTool() {
     return this.props.model
       .get("toolConfig")
-      .find(tool => tool.type === this.type);
+      .find((tool) => tool.type === this.type);
   }
 
   add(tool) {
@@ -117,12 +131,12 @@ class ToolOptions extends Component {
     this.props.model.set({
       toolConfig: this.props.model
         .get("toolConfig")
-        .filter(tool => tool.type !== this.type)
+        .filter((tool) => tool.type !== this.type),
     });
   }
 
   replace(tool) {
-    this.props.model.get("toolConfig").forEach(t => {
+    this.props.model.get("toolConfig").forEach((t) => {
       if (t.type === this.type) {
         t.options = tool.options;
         t.index = tool.index;
@@ -146,8 +160,8 @@ class ToolOptions extends Component {
         visibleForGroups: this.state.visibleForGroups.map(
           Function.prototype.call,
           String.prototype.trim
-        )
-      }
+        ),
+      },
     };
 
     var existing = this.getTool();
@@ -158,7 +172,7 @@ class ToolOptions extends Component {
         () => {
           this.props.parent.props.parent.setState({
             alert: true,
-            alertMessage: "Uppdateringen lyckades"
+            alertMessage: "Uppdateringen lyckades",
           });
         }
       );
@@ -175,7 +189,7 @@ class ToolOptions extends Component {
             this.remove();
             update.call(this);
             this.setState(defaultState);
-          }
+          },
         });
       } else {
         this.remove();
@@ -203,7 +217,7 @@ class ToolOptions extends Component {
     }
 
     this.setState({
-      visibleForGroups: value !== "" ? groups : []
+      visibleForGroups: value !== "" ? groups : [],
     });
   }
 
@@ -217,7 +231,7 @@ class ToolOptions extends Component {
             value={this.state.visibleForGroups}
             type="text"
             name="visibleForGroups"
-            onChange={e => {
+            onChange={(e) => {
               this.handleAuthGrpsChange(e);
             }}
           />
@@ -233,7 +247,7 @@ class ToolOptions extends Component {
     if (services) {
       return services.map((service, i) => {
         var active = this.state.activeServices.find(
-          serviceId => serviceId === service.id
+          (serviceId) => serviceId === service.id
         );
         if (active === undefined) {
           active = false;
@@ -245,17 +259,17 @@ class ToolOptions extends Component {
               name={service.caption}
               type="checkbox"
               checked={active}
-              onChange={e => {
+              onChange={(e) => {
                 var actives = [...this.state.activeServices];
                 if (e.target.checked) {
                   actives.push(service.id);
                 } else {
                   actives = actives.filter(
-                    serviceId => serviceId !== service.id
+                    (serviceId) => serviceId !== service.id
                   );
                 }
                 this.setState({
-                  activeServices: actives
+                  activeServices: actives,
                 });
               }}
             />
@@ -276,22 +290,24 @@ class ToolOptions extends Component {
       <div>
         <form>
           <p>
-            <button
-              className="btn btn-primary"
-              onClick={e => {
+            <ColorButtonBlue
+              variant="contained"
+              className="btn"
+              onClick={(e) => {
                 e.preventDefault();
                 this.save();
               }}
+              startIcon={<SaveIcon />}
             >
               Spara
-            </button>
+            </ColorButtonBlue>
           </p>
           <div>
             <input
               id="active"
               name="active"
               type="checkbox"
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange(e);
               }}
               checked={this.state.active}
@@ -308,7 +324,7 @@ class ToolOptions extends Component {
               type="number"
               min="0"
               className="control-fixed-width"
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange(e);
               }}
               value={this.state.index}
@@ -320,7 +336,7 @@ class ToolOptions extends Component {
               id="target"
               name="target"
               className="control-fixed-width"
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange(e);
               }}
               value={this.state.target}
@@ -328,6 +344,7 @@ class ToolOptions extends Component {
               <option value="toolbar">Drawer</option>
               <option value="left">Widget left</option>
               <option value="right">Widget right</option>
+              <option value="control">Control button</option>
             </select>
           </div>
           <div>
@@ -343,7 +360,7 @@ class ToolOptions extends Component {
               id="position"
               name="position"
               className="control-fixed-width"
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange(e);
               }}
               value={this.state.position}
@@ -367,7 +384,7 @@ class ToolOptions extends Component {
               type="number"
               min="0"
               className="control-fixed-width"
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange(e);
               }}
               value={this.state.width}
@@ -388,7 +405,7 @@ class ToolOptions extends Component {
               type="number"
               min="0"
               className="control-fixed-width"
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange(e);
               }}
               value={this.state.height}
@@ -400,7 +417,7 @@ class ToolOptions extends Component {
               id="visibleAtStart"
               name="visibleAtStart"
               type="checkbox"
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange(e);
               }}
               checked={this.state.visibleAtStart}
@@ -421,7 +438,7 @@ class ToolOptions extends Component {
               type="text"
               id="instruction"
               name="instruction"
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange(e);
               }}
               value={this.state.instruction ? atob(this.state.instruction) : ""}
@@ -432,7 +449,7 @@ class ToolOptions extends Component {
             <ul
               style={{
                 display: "inline-block",
-                padding: 0
+                padding: 0,
               }}
             >
               {this.renderServices()}

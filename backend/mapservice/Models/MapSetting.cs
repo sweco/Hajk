@@ -10,6 +10,7 @@ namespace MapService.Models
     {
         public string primaryColor { get; set; }
         public string secondaryColor { get; set; }
+        public string preferredColorScheme { get; set; }
     }
 
     public class MapSetting
@@ -36,7 +37,15 @@ namespace MapService.Models
 
         public bool constrainOnlyCenter { get; set; }
 
+        public bool constrainResolution { get; set; }
+        
+        public bool enableDownloadLink { get; set; }
+
         public string logo { get; set; }
+
+        public string logoLight { get; set; }
+
+        public string logoDark { get; set; }        
 
         public string geoserverLegendOptions { get; set; }
 
@@ -46,12 +55,22 @@ namespace MapService.Models
 
         public bool drawerVisible { get; set; }
 
+        public bool drawerVisibleMobile {get; set; }
+
         public bool drawerPermanent { get; set; }
+
+        public string activeDrawerOnStart { get; set; }
 
         public Colors colors { get; set; }
 
         public string defaultCookieNoticeMessage { get; set; }
 
         public string defaultCookieNoticeUrl { get; set; }
+        
+        public string crossOrigin { get; set; }
+
+        public bool showCookieNotice { get; set; }
+
+        public bool showThemeToggler { get; set; }
     }
 }

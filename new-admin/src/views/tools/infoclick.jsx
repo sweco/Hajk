@@ -22,6 +22,10 @@
 
 import React, { Component } from "react";
 import { SketchPicker } from "react-color";
+import Button from "@material-ui/core/Button";
+import SaveIcon from "@material-ui/icons/Save";
+import { withStyles } from "@material-ui/core/styles";
+import { blue } from "@material-ui/core/colors";
 
 var defaultState = {
   validationErrors: [],
@@ -32,15 +36,25 @@ var defaultState = {
   position: "right",
   width: 400,
   height: 300,
-
   src: "marker.png",
   scale: 0.15,
   strokeColor: { r: 200, b: 0, g: 0, a: 0.7 },
   strokeWidth: 4,
   fillColor: { r: 255, b: 0, g: 0, a: 0.1 },
   anchorX: 0.5,
-  anchorY: 1
+  anchorY: 1,
+  allowDangerousHtml: true,
 };
+
+const ColorButtonBlue = withStyles((theme) => ({
+  root: {
+    color: theme.palette.getContrastText(blue[500]),
+    backgroundColor: blue[500],
+    "&:hover": {
+      backgroundColor: blue[700],
+    },
+  },
+}))(Button);
 
 class ToolOptions extends Component {
   /**
@@ -69,13 +83,15 @@ class ToolOptions extends Component {
         fillColor: tool.options.fillColor || this.state.fillColor,
         anchorX: tool.options.anchor[0] || this.state.anchorX,
         anchorY: tool.options.anchor[1] || this.state.anchorY,
+        allowDangerousHtml:
+          tool.options.allowDangerousHtml || this.state.allowDangerousHtml,
         visibleForGroups: tool.options.visibleForGroups
           ? tool.options.visibleForGroups
-          : []
+          : [],
       });
     } else {
       this.setState({
-        active: false
+        active: false,
       });
     }
   }
@@ -94,14 +110,14 @@ class ToolOptions extends Component {
       value = !isNaN(Number(value)) ? Number(value) : value;
     }
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
   getTool() {
     return this.props.model
       .get("toolConfig")
-      .find(tool => tool.type === this.type);
+      .find((tool) => tool.type === this.type);
   }
 
   add(tool) {
@@ -112,12 +128,12 @@ class ToolOptions extends Component {
     this.props.model.set({
       toolConfig: this.props.model
         .get("toolConfig")
-        .filter(tool => tool.type !== this.type)
+        .filter((tool) => tool.type !== this.type),
     });
   }
 
   replace(tool) {
-    this.props.model.get("toolConfig").forEach(t => {
+    this.props.model.get("toolConfig").forEach((t) => {
       if (t.type === this.type) {
         t.options = tool.options;
         t.index = tool.index;
@@ -140,11 +156,12 @@ class ToolOptions extends Component {
         strokeColor: this.state.strokeColor,
         strokeWidth: this.state.strokeWidth,
         fillColor: this.state.fillColor,
+        allowDangerousHtml: this.state.allowDangerousHtml,
         visibleForGroups: this.state.visibleForGroups.map(
           Function.prototype.call,
           String.prototype.trim
-        )
-      }
+        ),
+      },
     };
 
     var existing = this.getTool();
@@ -155,7 +172,7 @@ class ToolOptions extends Component {
         () => {
           this.props.parent.props.parent.setState({
             alert: true,
-            alertMessage: "Uppdateringen lyckades"
+            alertMessage: "Uppdateringen lyckades",
           });
         }
       );
@@ -172,7 +189,7 @@ class ToolOptions extends Component {
             this.remove();
             update.call(this);
             this.setState(defaultState);
-          }
+          },
         });
       } else {
         this.remove();
@@ -200,7 +217,7 @@ class ToolOptions extends Component {
     }
 
     this.setState({
-      visibleForGroups: value !== "" ? groups : []
+      visibleForGroups: value !== "" ? groups : [],
     });
   }
 
@@ -214,7 +231,7 @@ class ToolOptions extends Component {
             value={this.state.visibleForGroups}
             type="text"
             name="visibleForGroups"
-            onChange={e => {
+            onChange={(e) => {
               this.handleAuthGrpsChange(e);
             }}
           />
@@ -242,22 +259,24 @@ class ToolOptions extends Component {
       <div>
         <form>
           <p>
-            <button
-              className="btn btn-primary"
-              onClick={e => {
+            <ColorButtonBlue
+              variant="contained"
+              className="btn"
+              onClick={(e) => {
                 e.preventDefault();
                 this.save();
               }}
+              startIcon={<SaveIcon />}
             >
               Spara
-            </button>
+            </ColorButtonBlue>
           </p>
           <div>
             <input
               id="active"
               name="active"
               type="checkbox"
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange(e);
               }}
               checked={this.state.active}
@@ -280,7 +299,7 @@ class ToolOptions extends Component {
               name="title"
               placeholder={defaultState.title}
               type="text"
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange(e);
               }}
               value={this.state.title}
@@ -299,7 +318,7 @@ class ToolOptions extends Component {
               id="position"
               name="position"
               className="control-fixed-width"
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange(e);
               }}
               value={this.state.position}
@@ -324,7 +343,7 @@ class ToolOptions extends Component {
               type="number"
               min="0"
               className="control-fixed-width"
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange(e);
               }}
               value={this.state.width}
@@ -346,13 +365,27 @@ class ToolOptions extends Component {
               type="number"
               min="0"
               className="control-fixed-width"
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange(e);
               }}
               value={this.state.height}
             />
           </div>
+          <div className="separator">Generella inställningar</div>
           {this.renderVisibleForGroups()}
+          <div>
+            <input
+              id="allowDangerousHtml"
+              name="allowDangerousHtml"
+              type="checkbox"
+              onChange={(e) => {
+                this.handleInputChange(e);
+              }}
+              checked={this.state.allowDangerousHtml}
+            />
+            &nbsp;
+            <label htmlFor="allowDangerousHtml">Tillåt HTML i infoclick</label>
+          </div>
           <div className="separator">Ikon och markering</div>
           <div>
             <label htmlFor="src">URL till bild</label>
@@ -361,7 +394,7 @@ class ToolOptions extends Component {
               type="text"
               name="src"
               placeholder={defaultState.src}
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange(e);
               }}
             />
@@ -377,7 +410,7 @@ class ToolOptions extends Component {
               step="0.1"
               name="anchorX"
               className="control-fixed-width"
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange(e);
               }}
             />
@@ -393,7 +426,7 @@ class ToolOptions extends Component {
               step="0.1"
               name="anchorY"
               className="control-fixed-width"
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange(e);
               }}
             />
@@ -409,7 +442,7 @@ class ToolOptions extends Component {
               max="10"
               name="scale"
               className="control-fixed-width"
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange(e);
               }}
             />
@@ -425,7 +458,7 @@ class ToolOptions extends Component {
               step="1"
               name="strokeWidth"
               className="control-fixed-width"
-              onChange={e => {
+              onChange={(e) => {
                 this.handleInputChange(e);
               }}
             />
@@ -443,9 +476,9 @@ class ToolOptions extends Component {
                     r: this.state.strokeColor.r,
                     b: this.state.strokeColor.b,
                     g: this.state.strokeColor.g,
-                    a: this.state.strokeColor.a
+                    a: this.state.strokeColor.a,
                   }}
-                  onChangeComplete={color =>
+                  onChangeComplete={(color) =>
                     this.handleColorChange("strokeColor", color)
                   }
                 />
@@ -463,9 +496,9 @@ class ToolOptions extends Component {
                     r: this.state.fillColor.r,
                     b: this.state.fillColor.b,
                     g: this.state.fillColor.g,
-                    a: this.state.fillColor.a
+                    a: this.state.fillColor.a,
                   }}
-                  onChangeComplete={color =>
+                  onChangeComplete={(color) =>
                     this.handleColorChange("fillColor", color)
                   }
                 />
